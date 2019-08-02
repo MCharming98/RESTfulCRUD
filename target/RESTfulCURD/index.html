@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Blog Post Manager</title>
+<script type="text/javascript" src="jquery-3.4.1.js">
+
+<script>
+	$(document).ready( 
+		function() {
+        	$.getJSON("rest/blogPosts",{}, showBlogPosts);
+		}
+  	);
+  	
+  	function showBlogPosts(blogPosts) {
+  		$.each(blogPosts, 
+    	 function(idx,blogPost) 
+    	 {
+    	    $("#blogPosts").append("<li>" + blogPost.title + " - " + blogPost.arthur + " </br> " +  blogPost.content + "</li>");
+         }
+     );
+  	}
+  	
+  	function updateBlogPost() {
+    	$.ajax( 
+	    	 {
+		       url : "rest/blogPosts/" +  $("#title").val(),
+      	       data : {"content": $("#newContent").val()},
+		       method : "PUT",
+	    	 }
+	    ); 
+	 }
+	 
+	 function deleteBlogPost() {
+	     $.ajax( 
+	    	 {
+		       url : "rest/blogPosts/" + $("#title").val(),
+	  	       method : "DELETE",
+	    	 }
+	      );
+	 }
+	   
+     function createBlogPost() {
+		 $.ajax( 
+			 {
+		       url : "rest/blogPosts",
+		       data : { "title" : $("#title").val(), "arthur": $("#arthur").val(), "content": $("#content").val()},
+		       method : "POST",
+			 }
+		  );
+     }
+</script>
+</head>
+
+<body>
+	<h2>Blog Posts</h2>
+	<ul id="blogPosts">
+	</ul>
+
+	<h3>Update or Delete Blog Post</h3>
+	Title
+	</br>
+	<input type="text" id="title" /> 
+	<button onclick="deleteBlogPost()">Delete </button>
+	</p>
+	Content
+	</br>
+	<input type="text" id="newContent" />
+	</p>
+	<button onclick="updateContent()">Update Content</button>
+
+	<h3>Create New Blog Post</h3>
+	Title
+	</br>
+	<input type="text" id="title" />
+	</p>
+	Arthur
+	</br>
+	<input type="text" id="arthur" />
+	</p>
+	Content
+	</br>
+	<input type="text" id="content" />
+	</p>
+	<button onclick="createBlogPost()">Create New Blog Post</button>
+</body>
